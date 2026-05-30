@@ -17,12 +17,9 @@ export default function DeadScreen({ state, dispatch }: DeadScreenProps) {
 
   return (
     <div className="screen">
-      <div className="splash-bg tint-red" />
+      <div className="death-bg" />
 
-      <div className="dead-panel">
-        <div className="dead-skull">☠</div>
-        <div className="dead-title">YOUR PARTY FALLS</div>
-
+      <div className="dead-overlay">
         <div className="dead-quip">"{deathQuip}"</div>
 
         {mode === 'adventure' && (
@@ -35,9 +32,7 @@ export default function DeadScreen({ state, dispatch }: DeadScreenProps) {
           </div>
         )}
 
-        <div className="dead-stats">
-          Depth {depth} · {formatTime(secondsElapsed)}
-        </div>
+        <div className="dead-stats">Depth {depth} · {formatTime(secondsElapsed)}</div>
 
         <button
           className="btn-danger"
