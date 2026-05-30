@@ -219,7 +219,8 @@
 
 .game-board {
   display: grid;
-  gap: 2px;
+  gap: 0;
+  grid-auto-rows: var(--tile-size);
   /* grid-template-columns set inline in GameBoard component */
 }
 
@@ -230,30 +231,20 @@
   background-image: url('/assets/images/tileset.png');
   background-repeat: no-repeat;
   background-size: calc(var(--tile-size) * 4) calc(var(--tile-size) * 4);
+  image-rendering: pixelated;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-  transition: transform 0.08s;
+  transition: filter 0.08s;
 }
 
-.tile:hover {
-  transform: scale(1.05);
-  z-index: 1;
-  position: relative;
+/* Brightness glow on hover — stays within its grid cell, never shifts layout */
+.tile.hidden:hover {
+  filter: brightness(1.25);
 }
 
 .tile.revealed, .tile.flagged {
   cursor: default;
-}
-
-.tile-reveal-pop {
-  animation: tile-pop 0.12s ease-out;
-}
-
-@keyframes tile-pop {
-  0%   { transform: scale(0.85); }
-  60%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
 }
 
 /* ─── Adventure log ─────────────────────────────────────────── */
