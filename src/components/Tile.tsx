@@ -4,13 +4,11 @@ import { NUMBER_SPRITES, HAZARD_SPRITES, TILE_SPRITES } from '../game/constants'
 
 interface TileProps {
   tile: TileType;
-  tileSize: number;
-  tilesetTilePx: number;
   onReveal: () => void;
   onFlag: () => void;
 }
 
-function getSpritePos(tile: TileType, px: number): string {
+function getSpritePos(tile: TileType): string {
   let [spriteRow, spriteCol]: [number, number] = [0, 0];
 
   if (tile.state === 'hidden') {
@@ -25,10 +23,12 @@ function getSpritePos(tile: TileType, px: number): string {
     [spriteRow, spriteCol] = NUMBER_SPRITES[tile.adjacentHazards - 1];
   }
 
-  return `${-spriteCol * px}px ${-spriteRow * px}px`;
+  const x = spriteCol === 0 ? '0px' : `calc(${-spriteCol} * var(--tile-size))`;
+  const y = spriteRow === 0 ? '0px' : `calc(${-spriteRow} * var(--tile-size))`;
+  return `${x} ${y}`;
 }
 
-export default function Tile({ tile, tileSize, tilesetTilePx, onReveal, onFlag }: TileProps) {
+export default function Tile({ tile, onReveal, onFlag }: TileProps) {
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchMovedRef = useRef(false);
 
@@ -61,17 +61,10 @@ export default function Tile({ tile, tileSize, tilesetTilePx, onReveal, onFlag }
     e.preventDefault();
   };
 
-  const sheetPx = tilesetTilePx * 4;
-
   return (
     <div
       className={`tile ${tile.state}`}
-      style={{
-        width: tileSize,
-        height: tileSize,
-        backgroundPosition: getSpritePos(tile, tilesetTilePx),
-        backgroundSize: `${sheetPx}px ${sheetPx}px`,
-      }}
+      style={{ backgroundPosition: getSpritePos(tile) }}
       onClick={() => { if (tile.state === 'hidden') onReveal(); }}
       onContextMenu={e => { e.preventDefault(); onFlag(); }}
       onTouchStart={handleTouchStart}

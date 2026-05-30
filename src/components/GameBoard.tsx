@@ -8,9 +8,6 @@ interface GameBoardProps {
   disabled?: boolean;
 }
 
-const TILE_DISPLAY_SIZE = 48;
-const TILESET_TILE_PX = 313.5; // 1254px / 4 tiles = 313.5 exactly
-
 export default function GameBoard({ board, dispatch, disabled = false }: GameBoardProps) {
   if (board.length === 0) return null;
   const cols = board[0].length;
@@ -18,14 +15,12 @@ export default function GameBoard({ board, dispatch, disabled = false }: GameBoa
   return (
     <div
       className="game-board"
-      style={{ gridTemplateColumns: `repeat(${cols}, ${TILE_DISPLAY_SIZE}px)` }}
+      style={{ gridTemplateColumns: `repeat(${cols}, var(--tile-size))` }}
     >
       {board.flat().map(tile => (
         <TileComponent
           key={`${tile.row}-${tile.col}`}
           tile={tile}
-          tileSize={TILE_DISPLAY_SIZE}
-          tilesetTilePx={TILESET_TILE_PX}
           onReveal={() => {
             if (!disabled) dispatch({ type: 'REVEAL_TILE', row: tile.row, col: tile.col });
           }}

@@ -226,6 +226,7 @@
   height: var(--tile-size);
   background-image: url('/assets/images/tileset.png');
   background-repeat: no-repeat;
+  background-size: calc(var(--tile-size) * 4) calc(var(--tile-size) * 4);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
