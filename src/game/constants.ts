@@ -12,7 +12,7 @@ export const DEPTH_LEVELS = [
 ] as const;
 
 export const MAX_DEPTH_GRID = { cols: 24, rows: 24 };
-export const MAX_HAZARD_DENSITY = 0.15;
+export const MAX_HAZARD_DENSITY = 0.17;
 
 export const FLAVOR_TEXT: Record<number, string[]> = {
   0: [
