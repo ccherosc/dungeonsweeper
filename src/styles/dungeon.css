@@ -395,6 +395,11 @@
   .header-value { font-size: 1rem; }
 
   .dead-overlay { bottom: 16px; padding: 16px 20px; max-width: 92vw; }
+
+  .death-bg {
+    background-image: url('/assets/images/DeathDungeonMobile.png');
+    background-position: center top;
+  }
 }
 
 @media (max-width: 380px) {
