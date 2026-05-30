@@ -36,4 +36,12 @@ describe('checkWin', () => {
     modified[0][0].state = 'flagged';
     expect(checkWin(modified)).toBe(true);
   });
+
+  it('returns false when a safe tile is flagged (player must reveal it to win)', () => {
+    const board = createBoard(2, 2);
+    const modified = board.map(r => r.map(t => ({ ...t, state: 'revealed' as const })));
+    modified[0][0].isHazard = true;    // hazard, ok
+    modified[1][1].state = 'flagged';  // safe tile flagged — blocks win
+    expect(checkWin(modified)).toBe(false);
+  });
 });
