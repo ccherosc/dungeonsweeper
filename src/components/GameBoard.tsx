@@ -6,9 +6,10 @@ interface GameBoardProps {
   board: TileType[][];
   dispatch: Dispatch<Action>;
   disabled?: boolean;
+  flagMode?: boolean;
 }
 
-export default function GameBoard({ board, dispatch, disabled = false }: GameBoardProps) {
+export default function GameBoard({ board, dispatch, disabled = false, flagMode = false }: GameBoardProps) {
   if (board.length === 0) return null;
   const cols = board[0].length;
 
@@ -21,6 +22,7 @@ export default function GameBoard({ board, dispatch, disabled = false }: GameBoa
         <TileComponent
           key={`${tile.row}-${tile.col}`}
           tile={tile}
+          flagMode={flagMode}
           onReveal={() => {
             if (!disabled) dispatch({ type: 'REVEAL_TILE', row: tile.row, col: tile.col });
           }}

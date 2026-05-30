@@ -1,4 +1,4 @@
-import { Dispatch } from 'react';
+import { Dispatch, useState } from 'react';
 import { GameState, Action } from '../game/types';
 import GameBoard from './GameBoard';
 import LevelTransition from './LevelTransition';
@@ -16,6 +16,7 @@ function formatTime(seconds: number): string {
 
 export default function GameScreen({ state, dispatch }: GameScreenProps) {
   const { board, depth, mode, hearts, hazardCount, flagsUsed, secondsElapsed, showTransition, adventureLogText } = state;
+  const [flagMode, setFlagMode] = useState(false);
   const torchesLeft = hazardCount - flagsUsed;
 
   return (
@@ -44,6 +45,15 @@ export default function GameScreen({ state, dispatch }: GameScreenProps) {
           🧙
         </button>
 
+        <button
+          className={`flag-mode-btn${flagMode ? ' active' : ''}`}
+          title={flagMode ? 'Flag mode — tap to plant torch' : 'Explore mode — tap to reveal'}
+          onClick={() => setFlagMode(f => !f)}
+          aria-pressed={flagMode}
+        >
+          🚩
+        </button>
+
         <div className="header-stat">
           <span className="header-label">Torches</span>
           <span className="header-value">{torchesLeft}</span>
@@ -56,7 +66,7 @@ export default function GameScreen({ state, dispatch }: GameScreenProps) {
       </div>
 
       <div className="board-wrapper">
-        <GameBoard board={board} dispatch={dispatch} disabled={showTransition} />
+        <GameBoard board={board} dispatch={dispatch} disabled={showTransition} flagMode={flagMode} />
         <div className="adventure-log">{adventureLogText}</div>
       </div>
 

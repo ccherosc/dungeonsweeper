@@ -4,6 +4,7 @@ import { NUMBER_SPRITES, HAZARD_SPRITES, TILE_SPRITES } from '../game/constants'
 
 interface TileProps {
   tile: TileType;
+  flagMode: boolean;
   onReveal: () => void;
   onFlag: () => void;
 }
@@ -28,16 +29,9 @@ function getSpritePos(tile: TileType): string {
   return `${x} ${y}`;
 }
 
-export default function Tile({ tile, onReveal, onFlag }: TileProps) {
+export default function Tile({ tile, flagMode, onReveal, onFlag }: TileProps) {
   const longPressRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchMovedRef = useRef(false);
-
-  const handleTouchStart = () => {
-    touchMovedRef.current = false;
-    longPressRef.current = setTimeout(() => {
-      if (!touchMovedRef.current) onFlag();
-    }, 500);
-  };
 
   const clearLongPress = () => {
     if (longPressRef.current) {
@@ -46,26 +40,47 @@ export default function Tile({ tile, onReveal, onFlag }: TileProps) {
     }
   };
 
+  const handleTouchStart = () => {
+    touchMovedRef.current = false;
+    longPressRef.current = setTimeout(() => {
+      longPressRef.current = null; // self-clear so touchEnd knows it fired
+      if (!touchMovedRef.current) onFlag();
+    }, 500);
+  };
+
   const handleTouchMove = () => {
     touchMovedRef.current = true;
     clearLongPress();
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchMovedRef.current && longPressRef.current) {
-      clearLongPress();
-      if (tile.state === 'hidden') onReveal();
-    } else {
-      clearLongPress();
-    }
     e.preventDefault();
+    if (touchMovedRef.current) { clearLongPress(); return; }
+    if (longPressRef.current !== null) {
+      // Timer hasn't fired yet = quick tap
+      clearLongPress();
+      if (flagMode) {
+        onFlag();
+      } else if (tile.state === 'hidden') {
+        onReveal();
+      }
+    }
+    // If null: long press already fired and flagged — do nothing
+  };
+
+  const handleClick = () => {
+    if (flagMode) {
+      onFlag();
+    } else if (tile.state === 'hidden') {
+      onReveal();
+    }
   };
 
   return (
     <div
       className={`tile ${tile.state}`}
       style={{ backgroundPosition: getSpritePos(tile) }}
-      onClick={() => { if (tile.state === 'hidden') onReveal(); }}
+      onClick={handleClick}
       onContextMenu={e => { e.preventDefault(); onFlag(); }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}

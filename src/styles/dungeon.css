@@ -197,6 +197,25 @@
 
 .hero-btn:hover { border-color: var(--clr-border-gold); }
 
+.flag-mode-btn {
+  background: none;
+  border: 2px solid var(--clr-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  opacity: 0.5;
+}
+
+.flag-mode-btn.active {
+  border-color: var(--clr-border-gold);
+  background: rgba(192, 128, 32, 0.25);
+  opacity: 1;
+}
+
+.flag-mode-btn:hover { opacity: 1; }
+
 .hearts {
   display: flex;
   gap: 4px;
