@@ -9,7 +9,7 @@ interface GameBoardProps {
 }
 
 const TILE_DISPLAY_SIZE = 48;
-const TILESET_TILE_PX = 314; // 1254px / 4 tiles = 313.5, rounded to 314
+const TILESET_TILE_PX = 313.5; // 1254px / 4 tiles = 313.5 exactly
 
 export default function GameBoard({ board, dispatch, disabled = false }: GameBoardProps) {
   if (board.length === 0) return null;
