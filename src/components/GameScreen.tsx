@@ -2,6 +2,7 @@ import { Dispatch, useState } from 'react';
 import { GameState, Action } from '../game/types';
 import GameBoard from './GameBoard';
 import LevelTransition from './LevelTransition';
+import DiceRoll from './DiceRoll';
 
 interface GameScreenProps {
   state: GameState;
@@ -15,7 +16,7 @@ function formatTime(seconds: number): string {
 }
 
 export default function GameScreen({ state, dispatch }: GameScreenProps) {
-  const { board, depth, mode, hearts, hazardCount, flagsUsed, secondsElapsed, showTransition, adventureLogText } = state;
+  const { board, depth, mode, adventureDifficulty, hearts, hazardCount, flagsUsed, secondsElapsed, showTransition, showDiceRoll, diceResult, adventureLogText } = state;
   const [flagMode, setFlagMode] = useState(false);
   const torchesLeft = hazardCount - flagsUsed;
 
@@ -71,6 +72,9 @@ export default function GameScreen({ state, dispatch }: GameScreenProps) {
       </div>
 
       {showTransition && <LevelTransition depth={depth} dispatch={dispatch} />}
+      {showDiceRoll && diceResult !== null && (
+        <DiceRoll finalResult={diceResult} difficulty={adventureDifficulty} dispatch={dispatch} />
+      )}
     </div>
   );
 }
