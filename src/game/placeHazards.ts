@@ -43,7 +43,8 @@ export function placeHazards(
 
   const next: Tile[][] = board.map(row => row.map(t => ({ ...t })));
 
-  candidates.slice(0, hazardCount).forEach(([r, c]) => {
+  const actualCount = Math.min(hazardCount, candidates.length);
+  candidates.slice(0, actualCount).forEach(([r, c]) => {
     next[r][c].isHazard = true;
     next[r][c].hazardVariant = (Math.floor(Math.random() * 5)) as 0 | 1 | 2 | 3 | 4;
   });
