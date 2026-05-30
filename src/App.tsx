@@ -7,6 +7,11 @@ import { revealTile } from './game/revealTile';
 import { flagTile } from './game/flagTile';
 import { checkWin } from './game/checkWin';
 import { DEATH_QUIPS, FLAVOR_TEXT } from './game/constants';
+import MenuScreen from './components/MenuScreen';
+import GameScreen from './components/GameScreen';
+import DeadScreen from './components/DeadScreen';
+import './styles/global.css';
+import './styles/dungeon.css';
 
 function getDeathQuip(depth: number): string {
   if (Math.random() < 0.2) return `Depth ${depth} was a perfectly reasonable place to die.`;
@@ -18,7 +23,7 @@ function pickFlavorText(count: number): string {
   return options[Math.floor(Math.random() * options.length)];
 }
 
-export function makeInitialPlayState(mode: GameMode): GameState {
+function makeInitialPlayState(mode: GameMode): GameState {
   const { rows, cols, hazards } = getLevelConfig(1);
   return {
     board: createBoard(rows, cols),
@@ -38,7 +43,7 @@ export function makeInitialPlayState(mode: GameMode): GameState {
   };
 }
 
-export const MENU_STATE: GameState = {
+const MENU_STATE: GameState = {
   board: [],
   screen: 'menu',
   mode: 'classic',
@@ -55,7 +60,7 @@ export const MENU_STATE: GameState = {
   deathQuip: '',
 };
 
-export function reducer(state: GameState, action: Action): GameState {
+function reducer(state: GameState, action: Action): GameState {
   switch (action.type) {
     case 'START_GAME':
       return makeInitialPlayState(action.mode);
@@ -174,8 +179,8 @@ export default function App() {
     }
   }, [state.screen, state.depth, state.mode]);
 
-  // Screen components added in Tasks 14-16
-  return <div style={{ color: 'white', background: '#0d0a06', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    DungeonSweeper — components loading...
-  </div>;
+  if (state.screen === 'menu') return <MenuScreen mode={state.mode} dispatch={dispatch} />;
+  if (state.screen === 'playing') return <GameScreen state={state} dispatch={dispatch} />;
+  if (state.screen === 'dead') return <DeadScreen state={state} dispatch={dispatch} />;
+  return null;
 }
